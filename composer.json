@@ -1,0 +1,16 @@
+{
+    "name":         "zazchou",
+    "type":         "library",
+    "description":  "zazchou payment",
+    "homepage":     "https://github.com/zhouzhi2015/zazchou",
+    "license":      "MIT",
+    "authors":      [
+        {
+            "name": "zhouzhi",
+            "email": "1184795629@qq.com"
+        }
+    ],
+    "require":      {
+        "php": ">=5.6"
+    }
+}
