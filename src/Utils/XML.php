@@ -4,7 +4,7 @@
  * @author zhouzhi@kuaiqiangche.com
  * @version 20160818 17:15
  */
-namespace  zazchou\src\Utils;
+namespace  zazChou\Utils;
 
 class XML{
 	

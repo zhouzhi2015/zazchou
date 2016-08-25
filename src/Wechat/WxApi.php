@@ -1,6 +1,6 @@
 <?php 
 
-namespace zazchou\src\Wechat;
+namespace zazChou\Wechat;
 
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redis;

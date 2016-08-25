@@ -5,7 +5,7 @@
  * @version 20160825 16:29
  */
 
-namespace zazchou\src\Alipay;
+namespace zazChou\Alipay;
 
 use Illuminate\Support\Facades\Redis;
 use Log;

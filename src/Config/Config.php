@@ -4,7 +4,7 @@
  * @author zhouzhi@kuaiqiangche.com
  * @version 1.0.0 at 20160823 11:28
  */
-namespace  zazchou\src\Config;
+namespace  zazChou\Config;
 
 class Config{
 	

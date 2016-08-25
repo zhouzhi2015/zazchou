@@ -2,7 +2,7 @@
 /**
  * 微支付类
  */
-namespace zazchou\src\Wechat;
+namespace zazChou\Wechat;
 
 use Illuminate\Support\Facades\Redis;
 use Log;
