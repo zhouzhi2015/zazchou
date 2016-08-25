@@ -4,7 +4,7 @@
  * @author zhouzhi@kuaiqiangche.com
  * @version 20160818 17:15
  */
-namespace  zazChou\src\Utils;
+namespace  zazchou\src\Utils;
 
 class XML{
 	
@@ -13,7 +13,7 @@ class XML{
 	 * @param array $arr
 	 * @return string
 	 */
-	public function arrayToXml($arr){
+	static public function arrayToXml($arr){
 		$xml = "<xml>";
 		foreach ($arr as $key => $val){
 			if (is_numeric($val)){
@@ -31,7 +31,7 @@ class XML{
 	 * @param string $xml
 	 * @return array
 	 */
-	public function xmlToArray($xml){
+	static public function xmlToArray($xml){
 		$arrayData = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
 		return $arrayData;
 	}
