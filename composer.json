@@ -17,10 +17,6 @@
         "psr-4": {
             "zazChou\\": "src/"
         }
-    },
-    "extra":        {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
     }
+
 }
