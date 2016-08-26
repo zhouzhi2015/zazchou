@@ -6,7 +6,7 @@
  */
 namespace  zazChou\Config;
 
-class Config{
+class ConfigMsg{
 	
 	const VALID_BC_PARAM = 'APP ID,APP Secret,Master Secret参数值均不能为空,请重新设置';
 	const VALID_SIGN_PARAM = 'APP ID, timestamp,APP(Master) Secret参数值均不能为空,请设置';
