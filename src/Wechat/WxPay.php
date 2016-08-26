@@ -6,9 +6,9 @@ namespace zazChou\Wechat;
 
 use Illuminate\Support\Facades\Redis;
 use Log;
-use zazchou\src\Utils\String;
-use zazchou\src\Utils\Http;
-use zazchou\src\Utils\XML;
+use zazChou\Utils\String;
+use zazChou\Utils\Http;
+use zazChou\Utils\XML;
 
 class WxPay{
 	
