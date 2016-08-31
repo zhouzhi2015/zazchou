@@ -6,9 +6,9 @@ namespace zazChou\Wechat;
 
 use Illuminate\Support\Facades\Redis;
 use Log;
-use zazChou\Utils\String;
-use zazChou\Utils\Http;
-use zazChou\Utils\XML;
+use zazChou\Utils\StringFun;
+use zazChou\Utils\HttpFun;
+use zazChou\Utils\XMLFun;
 
 class WxPay{
 	
@@ -153,7 +153,7 @@ class WxPay{
 	 * 获取jsapi支付的参数
 	 * @return json数据，可直接填入js函数作为参数
 	 */
-	private function getJsApiParameters(){
+	public function getJsApiParameters(){
 		$jsApiObj['appId'] = $this->appid;
 		$timeStamp = time();
 		$jsApiObj['timeStamp'] = "$timeStamp";

@@ -6,7 +6,7 @@
  */
 namespace  zazChou\Utils;
 
-class XML{
+class XMLFun{
 	
 	/**
 	 * 作用：array转xml

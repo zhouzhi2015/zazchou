@@ -1,7 +1,7 @@
 {
-    "name":         "zazchou",
+    "name":         "zazchou/zazChou",
     "type":         "library",
-    "description":  "zazchou payment",
+    "description":  "Common pay for kqc",
     "homepage":     "https://github.com/zhouzhi2015/zazchou",
     "license":      "MIT",
     "authors":      [

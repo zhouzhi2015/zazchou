@@ -6,7 +6,7 @@
  */
 namespace zazChou\Utils;
 
-class Http{
+class HttpFun{
 	
 	/**
 	 * 微信 以post方式提交xml到对应的接口url
