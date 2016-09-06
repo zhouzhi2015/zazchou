@@ -16,7 +16,7 @@ class WxPay{
 	public $parameters;
 	public $response;
 	public $appid;			//微信公众号身份的唯一标识
-	public $appsecret;
+	public $app_secret;
 	public $mch_id;			//受理商ID，身份标识
 	public $key;			//商户支付密钥Key
 	public $curl_timeout;	//本例程通过curl使用HTTP POST方法，默认为30秒
@@ -48,16 +48,19 @@ class WxPay{
 	 * @param string $sslcert_path
 	 * @param string $sslkey_path
 	 */
-	public function __construct($appId, $appSecret, $mchId, $key, $sslcertPath='', $sslkeyPath=''){
-		$this->appid = !empty($appId) ? $appId : '' ;
-		$this->appsecret = !empty($appSecret) ? $appSecret : '' ;
-		$this->mch_id = !empty($mchId) ? $mchId : '';
-		$this->key = !empty($key) ? $key : '';
-		$this->sslcert_path = !empty($sslcertPath) ? $sslcertPath : '';
-		$this->sslkey_path = !empty($sslkeyPath) ? $sslkeyPath : '';
+	public function __construct($wxConfig){
+		$this->appid = isset($wxConfig['appid']) ? $wxConfig['appid'] : '';
+		$this->app_secret = !empty($wxConfig['app_secret']) ? $wxConfig['app_secret'] : '';
+		$this->mch_id = !empty($wxConfig['mch_id']) ? $wxConfig['mch_id'] : '';
+		$this->key = !empty($wxConfig['key']) ? $wxConfig['key'] : '';
+		$this->sslcert_path = !empty($wxConfig['sslcert_path']) ? $wxConfig['sslcert_path'] : '';
+		$this->sslkey_path = !empty($wxConfig['sslkey_path']) ? $wxConfig['sslkey_path'] : '';
 		$this->curl_timeout = 30;
+		
+		$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+		$this->notify_url = $protocol.$_SERVER['HTTP_HOST'].'/kqcWxpayNotify';
 		//设置基本参数
-		$basicParams = array('appid', 'appsecret', 'mch_id', 'key', 'sslcert_path', 'sslkey_path');
+		$basicParams = array('appid', 'mch_id', 'notify_url');
 		foreach($basicParams as $value){
 			$this->setParameter($value, $this->$value);
 		}
@@ -127,8 +130,9 @@ class WxPay{
 		}
 		
 		$this->postXml();
-		$this->result = XML::xmlToArray($this->response);
-		Log::info('Info: wx get prepayid result data is'.serialize($this->result));
+		$this->result = XMLFun::xmlToArray($this->response);
+		app('log')->info('Info: wx get prepayid result data is'.serialize($this->result));
+		
 		if(($this->result['return_code'] == 'SUCCESS') && ($this->result['result_code'] == 'SUCCESS') ){
 			$prepay_id = $this->result["prepay_id"];
 			return array('status' => 'S', 'message' => $prepay_id);
@@ -142,10 +146,11 @@ class WxPay{
 	 * 	作用：post请求xml
 	 */
 	private function postXml(){
-		$this->parameters["nonce_str"] = String::getNonceStr(32);
-		$this->parameters["sign"] = String::makeSign($this->parameters, $this->key);
-		$xml =  XML::arrayToXml($this->parameters);
-		$this->response = HTTP::postXmlCurl($xml, $this->url, false, $this->curl_timeout);
+		$this->parameters["nonce_str"] = StringFun::getNonceStr(32);
+		$this->parameters["sign"] = StringFun::makeSign($this->parameters, $this->key);//旧的获取签名算法
+		$xml =  XMLFun::arrayToXml($this->parameters);
+		$this->response = HttpFun::postXmlCurl($xml, $this->url, false, $this->curl_timeout);
+
 		return $this->response;
 	}
 	
@@ -157,12 +162,29 @@ class WxPay{
 		$jsApiObj['appId'] = $this->appid;
 		$timeStamp = time();
 		$jsApiObj['timeStamp'] = "$timeStamp";
-		$jsApiObj['nonceStr'] = String::getNonceStr();
+		$jsApiObj['nonceStr'] = StringFun::getNonceStr();
 		$jsApiObj['package'] = "prepay_id=".$this->prepay_id;
 		$jsApiObj['signType'] = "MD5";
-		$jsApiObj['paySign'] = String::makeSign($jsApiObj, $this->key);
+		$jsApiObj['paySign'] = StringFun::makeSign($jsApiObj, $this->key);
 		$jsApiParameters = json_encode($jsApiObj);
 		return $jsApiParameters;
+	}
+	
+	/**
+	 * 获取APP支付的参数
+	 * @return json数据，可直接填入js函数作为参数
+	 */
+	public function getAppApiParameters(){
+		$appApiObj['appid'] = $this->appid;
+		$appApiObj['partnerid'] = $this->mch_id;
+		$appApiObj['prepayid'] = $this->prepay_id;
+		$appApiObj['package'] = "WXPay";
+		$appApiObj['nonceStr'] = StringFun::getNonceStr();
+		$timeStamp = time();
+		$appApiObj['timestamp'] = "$timeStamp";
+		$appApiObj['sign'] = StringFun::makeSign($appApiObj, $this->key);
+		$appApiParameters = json_encode($appApiObj);
+		return $appApiParameters;
 	}
 	
 	/**
@@ -182,18 +204,18 @@ class WxPay{
 			return $paramCheck;
 		}
 		$this->parameters['op_user_id'] = $this->mch_id;
-		$this->parameters["nonce_str"] = String::getNonceStr(32);
-		$this->parameters["sign"] = String::makeSign($this->parameters, $this->key);
+		$this->parameters["nonce_str"] = StringFun::getNonceStr(32);
+		$this->parameters["sign"] = StringFun::makeSign($this->parameters, $this->key);
 		
-		$xml = XML::arrayToXml($this->parameters);
-		$resXml = Http::postXmlCurl($xml, $this->refund_url, true, $this->curl_timeout);
-		Log::info('wxpay refund result is:\n'.serialize($resXml));
+		$xml = XMLFun::arrayToXml($this->parameters);
+		$resXml = HttpFun::postXmlCurl($xml, $this->refund_url, true, $this->curl_timeout);
+		app('log')->info('wxpay refund result is:\n'.serialize($resXml));
 		if($resXml === false){
 			$res['message'] = '退款失败 =。=!!'; $res['status'] = 'F';
 			return $res;
 		}
-		$res = XML::xmlToArray($resXml);
-		Log::info('Info: wxpay refund result is:\n'.serialize($res));
+		$res = XMLFun::xmlToArray($resXml);
+		app('log')->info('Info: wxpay refund result is:\n'.serialize($res));
 		if(($res['return_code'] == "SUCCESS") && ($res['result_code'] == "SUCCESS")){
 			$res['message'] = "退款成功";
 			$res['status'] = 'S';
