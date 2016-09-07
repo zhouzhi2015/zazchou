@@ -179,7 +179,7 @@ class WxPay{
 		$appApiObj['partnerid'] = $this->mch_id;
 		$appApiObj['prepayid'] = $this->prepay_id;
 		$appApiObj['package'] = "WXPay";
-		$appApiObj['nonceStr'] = StringFun::getNonceStr();
+		$appApiObj['noncestr'] = StringFun::getNonceStr();
 		$timeStamp = time();
 		$appApiObj['timestamp'] = "$timeStamp";
 		$appApiObj['sign'] = StringFun::makeSign($appApiObj, $this->key);
