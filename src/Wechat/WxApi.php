@@ -1,6 +1,6 @@
 <?php 
 
-namespace zazChou\Wechat;
+namespace kqcPay\Wechat;
 
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redis;

@@ -4,7 +4,7 @@
  * @author zhouzhi@kuaiqiangche.com
  * @version 20160818 16:56
  */
-namespace zazChou\Utils;
+namespace kqcPay\Utils;
 
 class StringFun{
 

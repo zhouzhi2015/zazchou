@@ -2,13 +2,13 @@
 /**
  * 微支付类
  */
-namespace zazChou\Wechat;
+namespace kqcPay\Wechat;
 
 use Illuminate\Support\Facades\Redis;
 use Log;
-use zazChou\Utils\StringFun;
-use zazChou\Utils\HttpFun;
-use zazChou\Utils\XMLFun;
+use kqcPay\Utils\StringFun;
+use kqcPay\Utils\HttpFun;
+use kqcPay\Utils\XmlFun;
 
 class WxPay{
 	
@@ -130,7 +130,7 @@ class WxPay{
 		}
 		
 		$this->postXml();
-		$this->result = XMLFun::xmlToArray($this->response);
+		$this->result = XmlFun::xmlToArray($this->response);
 		app('log')->info('Info: wx get prepayid result data is'.serialize($this->result));
 		
 		if(($this->result['return_code'] == 'SUCCESS') && ($this->result['result_code'] == 'SUCCESS') ){
@@ -148,7 +148,7 @@ class WxPay{
 	private function postXml(){
 		$this->parameters["nonce_str"] = StringFun::getNonceStr(32);
 		$this->parameters["sign"] = StringFun::makeSign($this->parameters, $this->key);//旧的获取签名算法
-		$xml =  XMLFun::arrayToXml($this->parameters);
+		$xml =  XmlFun::arrayToXml($this->parameters);
 		$this->response = HttpFun::postXmlCurl($xml, $this->url, false, $this->curl_timeout);
 
 		return $this->response;
@@ -207,14 +207,14 @@ class WxPay{
 		$this->parameters["nonce_str"] = StringFun::getNonceStr(32);
 		$this->parameters["sign"] = StringFun::makeSign($this->parameters, $this->key);
 		
-		$xml = XMLFun::arrayToXml($this->parameters);
+		$xml = XmlFun::arrayToXml($this->parameters);
 		$resXml = HttpFun::postXmlCurl($xml, $this->refund_url, true, $this->curl_timeout);
 		app('log')->info('wxpay refund result is:\n'.serialize($resXml));
 		if($resXml === false){
 			$res['message'] = '退款失败 =。=!!'; $res['status'] = 'F';
 			return $res;
 		}
-		$res = XMLFun::xmlToArray($resXml);
+		$res = XmlFun::xmlToArray($resXml);
 		app('log')->info('Info: wxpay refund result is:\n'.serialize($res));
 		if(($res['return_code'] == "SUCCESS") && ($res['result_code'] == "SUCCESS")){
 			$res['message'] = "退款成功";

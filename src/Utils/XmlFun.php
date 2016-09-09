@@ -4,9 +4,9 @@
  * @author zhouzhi@kuaiqiangche.com
  * @version 20160818 17:15
  */
-namespace  zazChou\Utils;
+namespace  kqcPay\Utils;
 
-class XMLFun{
+class XmlFun{
 	
 	/**
 	 * 作用：array转xml

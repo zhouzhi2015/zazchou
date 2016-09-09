@@ -1,8 +1,8 @@
 {
-    "name":         "zazchou/zazChou",
+    "name":         "kqcpay/kqcPay",
     "type":         "library",
     "description":  "Common pay for kqc",
-    "homepage":     "https://github.com/zhouzhi2015/zazchou",
+    "homepage":     "https://github.com/zhouzhi2015/kqcpay",
     "license":      "MIT",
     "authors":      [
         {
@@ -15,7 +15,7 @@
     },
 	"autoload": {
         "psr-4": {
-            "zazChou\\": "src/"
+            "kqcPay\\": "src/"
         }
     }
 

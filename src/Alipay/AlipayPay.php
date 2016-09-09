@@ -5,13 +5,13 @@
  * @version 20160825 16:29
  */
 
-namespace zazChou\Alipay;
+namespace kqcPay\Alipay;
 
 use Illuminate\Support\Facades\Redis;
 use Log;
-use zazChou\Utils\StringFun;
-use zazChou\Utils\HttpFun;
-use zazChou\Utils\XMLFun;
+use kqcPay\Utils\StringFun;
+use kqcPay\Utils\HttpFun;
+use kqcPay\Utils\XmlFun;
 
 class AlipayPay{
 	
@@ -134,8 +134,8 @@ class AlipayPay{
 	 * 1、wap支付跳转取得支付链接
 	 */
 	public function getPayLink(){	
-		//检测必填参数
-		$params = array('out_trade_no', 'subject', 'total_fee', 'return_url', 'notify_url', 'partner', 
+		//检测必填参数 'return_url',
+		$params = array('out_trade_no', 'subject', 'total_fee', 'notify_url', 'partner',
 				'seller_id', 'service','sign_type', 'payment_type', '_input_charset');
 		$paramCheck = self::verifyNeedParams($params, $this->parameters);
 		if(is_array($paramCheck) && ($paramCheck['status'] == 'F')){
@@ -231,7 +231,6 @@ class AlipayPay{
 				$mchKey = $this->public_key_path;
 			}
 		}else{
-			Log::debug('Info:Alipay notify verify param sign_type is not equal \n');
 			return false;
 		}
 		// 生成签名结果

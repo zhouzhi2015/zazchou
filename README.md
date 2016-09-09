@@ -1,2 +1,2 @@
-# zazchou
-zazchou payment
+# kqcpay
+kqc common pay tools
